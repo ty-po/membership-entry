@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
-var User  = require('./models/user.js');
 var Event = require('./models/event.js');
 var Org   = require('./models/org.js');
+var User  = require('./models/user.js');
 
 var Attend = require('./models/attend.js');
 var Status = require('./models/status.js');
