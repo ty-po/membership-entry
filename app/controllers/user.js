@@ -21,7 +21,7 @@ var post = function(req, res) {
 };
 
 var getAll = function(req, res) {
-  User.find({}, 'handle _id', function(err, users){
+  User.find({}, 'handle', function(err, users){
     if (err) return error(err, res);
     res.json(users);
   });
@@ -30,21 +30,19 @@ var getAll = function(req, res) {
 var get = function(req, res) {
   User.findOne({'handle': req.params.handle}, function(err, user) {
     if (err) return error(err, res);
-    if (!user) return res.send("no such user");
+    if (!user) return res.status(404).json({ 'message': 'no such user' });
     res.json(user);
   });
 };
 
 var put = function(req, res) {
-  User.findOne({'handle': req.params.handle}, "+auth", function(err, user) { 
+  User.findOne({'handle': req.params.handle}, '+auth', function(err, user) { 
     if (err) return error(err, res);
-
+    if (!user) return res.status(404).json({ 'message': 'no such user' });
     user.first  = req.body.first  ||  user.first;
     user.last   = req.body.last   ||  user.last;
     user.email  = req.body.email  ||  user.email;
     user.auth = req.body.password ||  user.auth;
-
-    console.log(user);
 
     user.save(function(err, user) {
       if (err) return error(err, res);
@@ -55,8 +53,8 @@ var put = function(req, res) {
 
 var del = function(req, res) {
   User.findOneAndRemove({'handle': req.params.handle}, function(err) {
-    if(err) return err(err, res);
-    res.json({ message: 'Successfully removed' });
+    if(err) return error(err, res);
+    res.json({ 'message': 'Successfully removed' });
   });
 };
 

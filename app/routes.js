@@ -32,8 +32,8 @@ router.route('/:_(orgs|o)')
 router.route('/:_(orgs|o)/:url')
   .post(auth.isUser, ctrl.Status.post)
   .get(auth.isUser, ctrl.Org.get)
-  .put(auth.isUser, ctrl.Org.put)
-  .delete(auth.isUser, ctrl.Org.del);
+  .put(auth.isUser, auth.isOwner, ctrl.Org.put)
+  .delete(auth.isUser, auth.isOwner, ctrl.Org.del);
 //Status CRUD
 router.route('/:_(orgs|o)/:url/:_(users|u)/:type?')
   .get(auth.isUser, ctrl.Status.getAll)

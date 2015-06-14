@@ -5,9 +5,7 @@ var error = require('../error.js').message;
 
 var post = function(req, res) {
   var org = new Org({
-    url: req.body.url,
-    name: req.body.name,
-    ownerHandle: req.user.handle
+  
   });
   org.save(function(err, org) {
     if (err) return error(err, res);
@@ -16,7 +14,7 @@ var post = function(req, res) {
 };
 
 var getAll = function(req, res) {
-  Org.find({}, 'url name',function(err, orgs){
+  Org.find({}, '', function(err, orgs){
     if (err) return error(err,res);
     res.json(orgs);
   });
@@ -24,7 +22,7 @@ var getAll = function(req, res) {
 
 
 var get = function(req, res) {
-  Org.findOne({'url': req.params.url}, function(err, org) {
+  Org.findOne({'': }, function(err, org) {
     if (err) return error(err,res);
     if (!org) return res.status(404).json({ 'message': 'no such org' });
     res.json(org);
@@ -32,12 +30,11 @@ var get = function(req, res) {
 };
 
 var put = function(req, res) {
-  Org.findOne({'url': req.params.url}, '+ownerHandle', function(err, org) {
+  Org.findOne({'': }, '+', function(err, org) {
     if (err) return error(err, res);
     if (!org) return res.status(404).json({ 'message': 'no such org' });
 
-    org.name        = req.body.name         ||  org.name;
-    org.ownerHandle = req.body.ownerHandle  ||  org.ownerHandle;
+
 
     org.save(function(err,org) {
       if (err) return error(err, res);
@@ -47,7 +44,7 @@ var put = function(req, res) {
 };
 
 var del = function(req, res) {
-  Org.findOneAndRemove({'url': req.params.url}, function(err) {
+  Org.findOneAndRemove({'': }, function(err) {
     if(err) return error(err, res);
     res.json({ 'message': 'Successfully removed' });
   });

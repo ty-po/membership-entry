@@ -30,17 +30,17 @@ var isUser    = passport.authenticate('basic', { session: false })
 
 var isMe      = function(req, res, next){
   if (req.user.handle == req.params.handle) return next();
-  res.status(401).send('Not Your Account');
+  res.status(401).json({'message': 'Not Your Account'});
 }; 
 
-var isOwner   = function(req, res, callback) {
+var isOwner   = function(req, res, next) {
   db.Org.findOne({ 'url': req.params.url })
       .select("+ownerHandle")
       .exec(function (err, org) {
-    if (err) return callback(err);
-    if (!org) return callback(null, false);
-    if (req.user.handle == org.ownerHandle) return callback(null, org);
-    return callback(null, false);
+    if (err) return next(err);
+    if (!org) return next(null, false);
+    if (req.user.handle == org.ownerHandle) return next(null, org);
+    res.status(401).json({'message': 'Not Your Organization'});
   });
 };
 
