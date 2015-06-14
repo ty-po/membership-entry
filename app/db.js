@@ -15,7 +15,7 @@ connect = function() {
 
   db.on('error', console.error.bind(console, 'connection error:'));
   db.once('open', function() {
-    console.log('connected');
+    console.log('mongoose connected');
   });
 
 };

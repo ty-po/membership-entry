@@ -37,6 +37,6 @@ AWS Ubuntu 14.04 instance
 - ~~Event model~~
 - Event controller
 - ~~Attend model~~
-- Attend controller
+- Attend controller <-- the biggie; parsing, dupe handling etc
 - Regex for URL and Handle in model and routes
 - Error Middleware

@@ -27,13 +27,15 @@ var getAll = function(req, res) {
 
 var get = function(req, res) {
   User.find({'handle': req.params.handle}, function(err, user) {
+    if (err) return error(err, res);
     res.json(user);
   });
 };
 
 var put = function(req, res) {
-  User.findOne({'handle': req.params.handle}, function(err, user) {
-     
+  User.findOne({'handle': req.params.handle}, function(err, user) { 
+    if (err) return error(err, res);
+
     user.name   = req.body.name,
     user.email  = req.body.email 
 
