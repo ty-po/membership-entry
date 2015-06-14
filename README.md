@@ -29,7 +29,7 @@ AWS Ubuntu 14.04 instance
 
 - ~~User model~~
 - ~~User controller~~
-- User Auth
+- ~~User Auth~~
 - ~~Org model~~
 - Org controller
 - ~~Status model~~
@@ -38,5 +38,7 @@ AWS Ubuntu 14.04 instance
 - Event controller
 - ~~Attend model~~
 - Attend controller <-- the biggie; parsing, dupe handling etc
-- Regex for URL and Handle in model and routes
+- Regex for `url` and `handle` in model and routes
 - Error Middleware
+- Load Saving
+- nginx Front
