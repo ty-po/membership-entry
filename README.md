@@ -27,12 +27,12 @@ AWS Ubuntu 14.04 instance
 
 #todo
 
-- ~User model
-- ~User controller~
+- ~~User model~~
+- ~~User controller~~
 - User Auth
-- ~Org model~
+- ~~Org model~~
 - Org controller
-- Status model
+- ~~Status model~~
 - Status controller
 - Event model
 - Event controller
