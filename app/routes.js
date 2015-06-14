@@ -20,9 +20,9 @@ router.route('/:_(users|u)/:handle/')
   .delete(auth.isUser, auth.isMe, ctrl.User.del);
 //User Status
 router.route('/:_(users|u)/:handle/:_(orgs|o)')
-  .get(ctrl.Status.getAll)
+  .get(auth.isUser, ctrl.Status.getAll)
 router.route('/:_(users|u)/:handle/:_(orgs|o)/:url')
-  .get(ctrl.Status.get)
+  .get(auth.isUser, ctrl.Status.get)
 
 //-------------------- Org-Side Routes --------------------
 //Org CRUD
@@ -36,20 +36,20 @@ router.route('/:_(orgs|o)/:url')
   .delete(auth.isUser, ctrl.Org.del);
 //Status CRUD
 router.route('/:_(orgs|o)/:url/:_(users|u)/:type?')
-  .get(ctrl.Status.getAll)
+  .get(auth.isUser, ctrl.Status.getAll)
 router.route('/:_(orgs|o)/:url/:_(users|u)/:handle')
-  .get(ctrl.Status.get)
-  .put(ctrl.Status.put)
-  .delete(ctrl.Status.del);
+  .get(auth.isUser, ctrl.Status.get)
+  .put(auth.isUser, ctrl.Status.put)
+  .delete(auth.isUser, ctrl.Status.del);
 //Event CRUD
 router.route('/:_(orgs|o)/:url/:_(events|e)')
-  .get(ctrl.Event.getAll)
-  .post(ctrl.Event.post);
+  .get(auth.isUser, ctrl.Event.getAll)
+  .post(auth.isUser, ctrl.Event.post);
 router.route('/:_(orgs|o)/:url/:_(events|e)/:id')
-  .post(ctrl.Attend.post)
-  .get(ctrl.Event.get)
-  .put(ctrl.Event.put)
-  .delete(ctrl.Event.del);
+  .post(auth.isUser, ctrl.Attend.post)
+  .get(auth.isUser, ctrl.Event.get)
+  .put(auth.isUser, ctrl.Event.put)
+  .delete(auth.isUser, ctrl.Event.del);
 
 
 module.exports = router;
