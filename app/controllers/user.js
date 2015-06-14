@@ -6,10 +6,12 @@ var error = require('../error.js').message;
 
 var post = function(req, res) {
   var user = new User({
-    handle: req.body.handle,
-    name:   req.body.name,
-    email:  req.body.email,
-    created: Date.now()
+    handle:   req.body.handle,
+    first:    req.body.first,
+    last:     req.body.last,
+    email:    req.body.email,
+    created:  Date.now(),
+    auth:     req.body.password
   });
 
   user.save(function(err, user) {
@@ -26,18 +28,23 @@ var getAll = function(req, res) {
 };
 
 var get = function(req, res) {
-  User.find({'handle': req.params.handle}, function(err, user) {
+  User.findOne({'handle': req.params.handle}, function(err, user) {
     if (err) return error(err, res);
+    if (!user) return res.send("no such user");
     res.json(user);
   });
 };
 
 var put = function(req, res) {
-  User.findOne({'handle': req.params.handle}, function(err, user) { 
+  User.findOne({'handle': req.params.handle}, "+auth", function(err, user) { 
     if (err) return error(err, res);
 
-    user.name   = req.body.name,
-    user.email  = req.body.email 
+    user.first  = req.body.first  ||  user.first;
+    user.last   = req.body.last   ||  user.last;
+    user.email  = req.body.email  ||  user.email;
+    user.auth = req.body.password ||  user.auth;
+
+    console.log(user);
 
     user.save(function(err, user) {
       if (err) return error(err, res);
@@ -45,6 +52,7 @@ var put = function(req, res) {
     });
   });
 };
+
 var del = function(req, res) {
   User.findOneAndRemove({'handle': req.params.handle}, function(err) {
     if(err) return err(err, res);

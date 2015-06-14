@@ -2,21 +2,22 @@ var express     = require('express');
 var router      = express.Router();
 
 var ctrl  = require('./ctrl.js');
+var auth  = ctrl.Auth
 
 router.route('/')
-  .get(function(req, res) {
+  .get(auth.isUser, function(req, res) {
     res.send('index')
   });
 
 //-------------------- User-Side Routes --------------------
 //User CRUD
 router.route('/:_(users|u)')
-  .get(ctrl.User.getAll)
+  .get(auth.isUser, ctrl.User.getAll)
   .post(ctrl.User.post);
 router.route('/:_(users|u)/:handle/')
-  .get(ctrl.User.get)
-  .put(ctrl.User.put)
-  .delete(ctrl.User.del);
+  .get(auth.isUser, ctrl.User.get)
+  .put(auth.isUser, auth.isMe, ctrl.User.put)
+  .delete(auth.isUser, auth.isMe, ctrl.User.del);
 //User Status
 router.route('/:_(users|u)/:handle/:_(orgs|o)')
   .get(ctrl.Status.getAll)
@@ -26,13 +27,13 @@ router.route('/:_(users|u)/:handle/:_(orgs|o)/:url')
 //-------------------- Org-Side Routes --------------------
 //Org CRUD
 router.route('/:_(orgs|o)')
-  .get(ctrl.Org.getAll)
-  .post(ctrl.Org.post);
+  .get(auth.isUser, ctrl.Org.getAll)
+  .post(auth.isUser, ctrl.Org.post);
 router.route('/:_(orgs|o)/:url')
-  .post(ctrl.Status.post)
-  .get(ctrl.Org.get)
-  .put(ctrl.Org.put)
-  .delete(ctrl.Org.del);
+  .post(auth.isUser, ctrl.Status.post)
+  .get(auth.isUser, ctrl.Org.get)
+  .put(auth.isUser, ctrl.Org.put)
+  .delete(auth.isUser, ctrl.Org.del);
 //Status CRUD
 router.route('/:_(orgs|o)/:url/:_(users|u)/:type?')
   .get(ctrl.Status.getAll)
