@@ -24,3 +24,19 @@ AWS Ubuntu 14.04 instance
 `npm install`
 
 `node server`
+
+#todo
+
+- ~User model
+- ~User controller~
+- User Auth
+- ~Org model~
+- Org controller
+- Status model
+- Status controller
+- Event model
+- Event controller
+- Attend model
+- Attend controller
+- Regex for URL and Handle in model and routes
+- Error Middleware

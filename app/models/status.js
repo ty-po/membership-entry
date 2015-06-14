@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
+var uniqueVal = require('mongoose-unique-validator');
 
 var statusSchema = mongoose.Schema({
-  name: String,
-  org: String
+  name: String
 })
 
-
+statusSchema.plugin(uniqueVal);
 module.exports = mongoose.model('Status', statusSchema);
