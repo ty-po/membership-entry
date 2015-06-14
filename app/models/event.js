@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
-var uniqueVal = require('mongoose-unique-validator');
 
 var eventSchema = mongoose.Schema({
-  name: String
+  name: { type: String, required: true },
+  org:  { type: String, required: true }
 })
 
-eventSchema.plugin(uniqueVal);
 module.exports = mongoose.model('Event', eventSchema);

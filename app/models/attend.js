@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
-var uniqueVal = require('mongoose-unique-validator');
 
 var attendSchema = mongoose.Schema({
-  name: String
+  eventID:  { type: mongoose.Schema.Types.ObjectId, required: true},
+  user:     { type: String, required: true },
+  timeIn:   { type: Date, required: true },
+  timeOut:  Date
 })
 
-attendSchema.plugin(uniqueVal);
 module.exports = mongoose.model('Attend', attendSchema);

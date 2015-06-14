@@ -34,9 +34,9 @@ AWS Ubuntu 14.04 instance
 - Org controller
 - ~~Status model~~
 - Status controller
-- Event model
+- ~~Event model~~
 - Event controller
-- Attend model
+- ~~Attend model~~
 - Attend controller
 - Regex for URL and Handle in model and routes
 - Error Middleware
