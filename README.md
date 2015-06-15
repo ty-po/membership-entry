@@ -27,6 +27,7 @@ AWS Ubuntu 14.04 instance
 
 #todo
 
+- TESTING
 - ~~User model~~
 - ~~User controller~~
 - ~~User Auth~~
