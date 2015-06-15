@@ -3,7 +3,7 @@ var Org     = require('./controllers/org.js');
 var User    = require('./controllers/user.js');
 
 var Attend  = require('./controllers/attend.js');
-var Status  = require('./controllers/status.js');
+var Standing  = require('./controllers/standing.js');
 
 var Auth    = require('./controllers/auth.js');
 
@@ -14,7 +14,7 @@ module.exports = {
   User: User,
 
   Attend: Attend,
-  Status: Status,
+  Standing: Standing,
 
   Auth: Auth
 };

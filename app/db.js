@@ -5,7 +5,7 @@ var Org   = require('./models/org.js');
 var User  = require('./models/user.js');
 
 var Attend = require('./models/attend.js');
-var Status = require('./models/status.js');
+var Standing = require('./models/standing.js');
 
 connect = function() {
 
@@ -26,5 +26,5 @@ module.exports = {
   Event: Event,
   Org: Org,
   Attend: Attend,
-  Status: Status
+  Standing: Standing
 };

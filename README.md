@@ -31,13 +31,15 @@ AWS Ubuntu 14.04 instance
 - ~~User controller~~
 - ~~User Auth~~
 - ~~Org model~~
-- Org controller
+- ~~Org controller~~
 - ~~Status model~~
-- Status controller
+- ~~Status controller~~
 - ~~Event model~~
 - Event controller
 - ~~Attend model~~
 - Attend controller <-- the biggie; parsing, dupe handling etc
+- `/m/` route on individual orgs and users for membership filtering
+- ssl
 - Regex for `url` and `handle` in model and routes
 - Error Middleware
 - Load Saving

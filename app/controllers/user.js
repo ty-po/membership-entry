@@ -30,7 +30,7 @@ var getAll = function(req, res) {
 var get = function(req, res) {
   User.findOne({'handle': req.params.handle}, function(err, user) {
     if (err) return error(err, res);
-    if (!user) return res.status(404).json({ 'message': 'no such user' });
+    if (!user) return error({ 'message': 'no such user' }, res);
     res.json(user);
   });
 };
@@ -38,7 +38,7 @@ var get = function(req, res) {
 var put = function(req, res) {
   User.findOne({'handle': req.params.handle}, '+auth', function(err, user) { 
     if (err) return error(err, res);
-    if (!user) return res.status(404).json({ 'message': 'no such user' });
+    if (!user) return error({ 'message': 'no such user' }, res);
     user.first  = req.body.first  ||  user.first;
     user.last   = req.body.last   ||  user.last;
     user.email  = req.body.email  ||  user.email;

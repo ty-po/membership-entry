@@ -1,5 +1,5 @@
 var message = function(err, res) {
-  if (!err.stack) return res.status(404).send('nothing here');
+  if (!err.message) return res.status(404).json({'message': 'nothing here'});
   console.error(err.stack);
   res.status(500).json({ 'message': err.message });
 };

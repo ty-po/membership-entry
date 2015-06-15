@@ -39,13 +39,44 @@ var isOwner   = function(req, res, next) {
       .exec(function (err, org) {
     if (err) return next(err);
     if (!org) return next(null, false);
-    if (req.user.handle == org.ownerHandle) return next(null, org);
-    res.status(401).json({'message': 'Not Your Organization'});
+    if (req.user.handle == org.ownerHandle) {
+      res.locals.Owner = true;
+      return next();
+    }
+    res.locals.Owner = false;
+    return next();
   });
 };
 
-var isMember  = function() {};
-var isAdmin   = function() {};
+var isMember  = function(req, res, next) {
+  isOwner(req, res, function(){  
+    if (res.locals.Owner) return next();
+    db.Standing.findOne({ 'org': req.params.url, 'user': req.user.handle }, 
+        function(err, standing) {    
+      if (err) return error(err);
+      if (!standing) return res.status(401).json({'message': 'No Standing with Org'});
+      if (standing.isMember) return next();
+
+      return res.status(401).json({'message': 'Not a Member'});
+    });
+  });
+};
+
+
+
+var isAdmin   = function(req, res, next) {
+  isOwner(req, res, function(){  
+    if (res.locals.Owner) return next();
+    db.Standing.findOne({ 'org': req.params.url, 'user': req.user.handle }, 
+        function(err, standing) {    
+      if (err) return error(err);
+      if (!standing) return res.status(401).json({'message': 'No Standing with Org'});
+      if (standing.isAdmin) return next();
+
+      return res.status(401).json({'message': 'Not an Admin'});
+    });
+  });
+};
 
 
 module.exports = {
