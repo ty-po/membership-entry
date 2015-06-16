@@ -3,6 +3,8 @@ var morgan      = require('morgan');
 var bodyParser  = require('body-parser');
 var passport    = require('passport');
 
+var config      = require('./app/config.js');
+
 var app = express();
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -21,4 +23,5 @@ app.use('/', routes);
 var error = require('./app/error.js');
 app.use(error.message);
 
-app.listen(3000);
+console.log('Open on ' + config.port);
+app.listen(config.port);
