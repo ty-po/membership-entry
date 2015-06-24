@@ -17,7 +17,8 @@ var strategy = function() {
         user.verifyAuth(auth, function(err, isMatch) {
           if (err) { return callback(err); }
           // Auth did not match
-          if (!isMatch) { return callback(null, user); }
+          if (!isMatch) { return callback(null, false); }
+
           // Success
           return callback(null, user);
         });
@@ -65,7 +66,7 @@ var isMember  = function(req, res, next) {
 
 
 var isAdmin   = function(req, res, next) {
-  isOwner(req, res, function(){  
+  isOwner(req, res, function(){ 
     if (res.locals.Owner) return next();
     db.Standing.findOne({ 'org': req.params.url, 'user': req.user.handle }, 
         function(err, standing) {    

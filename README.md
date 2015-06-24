@@ -25,7 +25,13 @@ AWS Ubuntu 14.04 instance
 
 `npm install`
 
+To develop
 `npm start`
+ and 
+`npm test`
+
+To run
+`node server`
 
 #todo
 
