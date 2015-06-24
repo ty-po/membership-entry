@@ -10,6 +10,7 @@ var testdb = mongoose.createConnection()
 //var testdb = mongoose.connection;
 
 before(function(done) {
+  console.log('Running Tests:');
   mongoose.connect(config.dbUrl.test);
   mongoose.connection.once('open', function() {
     return done(); 

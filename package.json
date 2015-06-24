@@ -8,7 +8,7 @@
     "url": "https://github.com/ty-po/membership-entry.git"
   },
   "scripts": {
-    "test": "node_modules/.bin/nodemon -q --exec 'node_modules/.bin/mocha' test"
+    "test": "node_modules/.bin/nodemon -q --exec '.bin/mocha-solarized' test"
   },
   "dependencies": {
     "express": "4.12.4",
