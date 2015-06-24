@@ -29,7 +29,16 @@ sudo chown -R `whoami` ~/.npm
 
 #todo
 
-- TESTING
+- unit testing
+- ~~Event model~~
+- Event controller
+- ~~Attend model~~
+- Attend controller <-- the biggie; parsing, dupe handling etc
+- Regex for `url` and `handle` in model and routes
+- Error Middleware
+- `/m/` route on individual orgs and users for membership filtering
+- Load Saving
+- ~~nginx Front~~
 - ~~User model~~
 - ~~User controller~~
 - ~~User Auth~~
@@ -37,13 +46,4 @@ sudo chown -R `whoami` ~/.npm
 - ~~Org controller~~
 - ~~Status model~~
 - ~~Status controller~~
-- ~~Event model~~
-- Event controller
-- ~~Attend model~~
-- Attend controller <-- the biggie; parsing, dupe handling etc
-- `/m/` route on individual orgs and users for membership filtering
-- ssl
-- Regex for `url` and `handle` in model and routes
-- Error Middleware
-- Load Saving
-- nginx Front
+- ~~ssl(self signed)~~

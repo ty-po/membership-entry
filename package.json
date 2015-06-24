@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/ty-po/membership-entry.git"
   },
+  "scripts": {
+    "test": "node_modules/.bin/nodemon -q --exec 'node_modules/.bin/mocha' test"
+  },
   "dependencies": {
     "express": "4.12.4",
     "morgan": "1.5.3",
@@ -16,5 +19,11 @@
     "passport": "0.2.2",
     "passport-http": "0.2.2",
     "bcrypt-nodejs": "0.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "1.3.7",
+    "mocha": "2.2.5",
+    "should": "7.0.1",
+    "supertest": "1.0.1"
   }
 }

@@ -10,14 +10,14 @@ var User  = require('./models/user.js');
 var Attend = require('./models/attend.js');
 var Standing = require('./models/standing.js');
 
-connect = function() {
-  var dbLocation = 'mongodb://' + path.join(config.dbUrl, '/membership-entry');
+var connect = function(env, done) {
+  var dbLocation = config.dbUrl[env];
 
   mongoose.connect(dbLocation);
 
   var db = mongoose.connection;
   
-  console.log('Connecting to ' + dbLocation);
+  console.log('Using ' + dbLocation);
 
   db.on('error', console.error.bind(console, 'connection error:'));
   db.once('open', function() {
