@@ -20,12 +20,12 @@ AWS Ubuntu 14.04 instance
 `sudo service mongod start`
 
 `cd membership-entry`
-```
-sudo chown -R `whoami` ~/.npm
-```
+
+`sudo chown -R $(whoami) ~/.npm`
+
 `npm install`
 
-`node server`
+`npm start`
 
 #todo
 

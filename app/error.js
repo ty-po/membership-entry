@@ -1,6 +1,8 @@
 var message = function(err, res) {
   if (!err.message) return res.status(404).json({'message': 'nothing here'});
-  console.error(err.stack);
+  if (process.env.NODE_ENV == 'development') {
+    console.error(err.stack);
+  }
   res.status(500).json({ 'message': err.message });
 };
 
