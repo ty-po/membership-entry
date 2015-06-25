@@ -1,10 +1,11 @@
 var mongoose  = require('mongoose');
 var uniqueVal = require('mongoose-unique-validator');
+var validate = require('mongoose-validators');
 var bcrypt    = require('bcrypt-nodejs');
 var SALT_WORK_FACTOR = 10;
 
 var userSchema = mongoose.Schema({
-  handle: { type: String, required: true, unique: true },
+  handle: { type: String, required: true, unique: true, lowercase: true, validate: validate.isAlphanumeric() },
   first: String,
   last: String,
   card: { type: String, unique: true , sparse: true, select: false },

@@ -44,6 +44,18 @@ var makeUser = function(spec, done) {
   });
 };
 
+var makeOrg = function(spec, done) {
+  var org = new db.Org({
+    url:          spec.url,
+    name:         spec.name,
+    ownerHandle:  spec.ownerHandle,
+  });
+  org.save(function(err, org) {
+    return done();
+  });
+};
+
 module.exports = {
-  makeUser: makeUser
+  makeUser: makeUser,
+  makeOrg:  makeOrg
 };

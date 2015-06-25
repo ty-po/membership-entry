@@ -2,7 +2,9 @@ var express     = require('express');
 var router      = express.Router();
 
 var ctrl  = require('./ctrl.js');
-var auth  = ctrl.Auth
+var auth  = ctrl.Auth;
+
+router.use(require('express-uncapitalize')());
 
 router.route('/')
   .get(auth.isUser, function(req, res) {
