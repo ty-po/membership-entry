@@ -36,14 +36,14 @@ To run
 #todo
 
 - unit testing
-- ~~Event model~~
 - Event controller
-- ~~Attend model~~
 - Attend controller <-- the biggie; parsing, dupe handling etc
-- Regex for `url` and `handle` in model and routes
-- Error Middleware
 - `/m/` route on individual orgs and users for membership filtering
 - Load Saving
+- ~~Error Middleware~~(kinda?)
+- ~~Regex for `url` and `handle` in model and routes~~(redirect instead)
+- ~~Event model~~
+- ~~Attend model~~
 - ~~nginx Front~~
 - ~~User model~~
 - ~~User controller~~
