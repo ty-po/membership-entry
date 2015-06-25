@@ -2,7 +2,7 @@
 
 var config = require('../app/config.js');
 var mongoose = require('mongoose');
-
+var db = require('../app/db.js');
 process.env.NODE_ENV = 'test'
 
 //var testdb = mongoose.createConnection()
@@ -10,7 +10,7 @@ process.env.NODE_ENV = 'test'
 //var testdb = mongoose.connection;
 
 
-before(function(done) {
+beforeEach(function(done) {
   mongoose.connect(config.dbUrl.test);
   mongoose.connection.once('open', function() {
     for (var i in mongoose.connection.collections) {
@@ -21,7 +21,7 @@ before(function(done) {
   }); 
 });
 
-after(function(done) {
+afterEach(function(done) {
   mongoose.connection.models = {};
   mongoose.connection.db.dropDatabase(function() {
     mongoose.connection.close(function() {
@@ -29,3 +29,21 @@ after(function(done) {
     });
   });
 });
+
+var makeUser = function(spec, done) {
+  var user = new db.User({
+    handle:   spec.handle,
+    first:    spec.first,
+    last:     spec.last,
+    email:    spec.email,
+    created:  Date.now(),
+    auth:     spec.password
+  });
+  user.save(function(err, user) {
+    return done();
+  });
+};
+
+module.exports = {
+  makeUser: makeUser
+};
