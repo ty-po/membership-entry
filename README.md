@@ -39,6 +39,7 @@ To run
 - Event controller
 - Attend controller <-- the biggie; parsing, dupe handling etc
 - `/m/` route on individual orgs and users for membership filtering
+- pending user logic
 - Load Saving
 - ~~Error Middleware~~(kinda?)
 - ~~Regex for `url` and `handle` in model and routes~~(redirect instead)

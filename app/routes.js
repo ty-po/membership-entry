@@ -32,13 +32,13 @@ router.route('/:_(orgs|o)')
   .get(auth.isUser, ctrl.Org.getAll)
   .post(auth.isUser, ctrl.Org.post);
 router.route('/:_(orgs|o)/:url')
-  .post(auth.isUser, auth.isAdmin, ctrl.Standing.post)
   .get(auth.isUser, ctrl.Org.get)
   .put(auth.isUser, auth.isOwner, ctrl.Org.put)
   .delete(auth.isUser, auth.isOwner, ctrl.Org.del);
 //Standing CRUD
 router.route('/:_(orgs|o)/:url/:_(users|u)/')
   .get(auth.isUser, ctrl.Standing.getOrg)
+  .post(auth.isUser, auth.isAdmin, ctrl.Standing.post)
 router.route('/:_(orgs|o)/:url/:_(users|u)/:handle')
   .get(auth.isUser, ctrl.Standing.get)
   .put(auth.isUser, auth.isAdmin, ctrl.Standing.put)

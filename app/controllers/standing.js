@@ -29,7 +29,7 @@ var post = function(req, res) {
       });
 
     }
-    else res.json({'message':'user exists', 'standing': standing});
+    else res.status(500).json({'message':'user exists', 'standing': standing});
   });
 
 

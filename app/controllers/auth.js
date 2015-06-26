@@ -56,7 +56,7 @@ var isMember  = function(req, res, next) {
         function(err, standing) {    
       if (err) return error(err);
       if (!standing) return res.status(401).json({'message': 'No Standing with Org'});
-      if (standing.isMember) return next();
+      if (standing.isMember || standing.isAdmin) return next();
 
       return res.status(401).json({'message': 'Not a Member'});
     });

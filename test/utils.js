@@ -55,7 +55,20 @@ var makeOrg = function(spec, done) {
   });
 };
 
+var makeStanding = function(spec, done) {
+  var standing = new db.Standing({
+    org: spec.url,
+    user: spec.handle,
+    isMember: spec.isMember,
+    isAdmin: spec.isAdmin,
+  });
+  standing.save(function(err, org) {
+    return done();
+  });
+}
+
 module.exports = {
   makeUser: makeUser,
-  makeOrg:  makeOrg
+  makeOrg:  makeOrg,
+  makeStanding: makeStanding,
 };
