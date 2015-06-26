@@ -33,6 +33,10 @@ To develop
 To run
 `node server`
 
+#Current Task
+
+- Standing Unit Tests
+
 #todo
 
 - unit testing

@@ -20,7 +20,14 @@ var targetstanding  = { url: 'targetorg', handle: 'testuser' }
 var adminstanding   = { url: 'adminorg', handle: 'testuser', isAdmin: true }
 var memberstanding  = { url: 'memberorg', handle: 'testuser', isMember: true }
 
-var admintargetstanding = { url: 'adminorg', handle: 'targetuser', ismember: true };
+var admintargetstanding = { url: 'adminorg', handle: 'targetuser', isMember: true };
+
+var userIsMember = function(res) {
+  res.body.should.have.property("isMember", true);
+};
+var userIsAdmin = function(res) {
+  res.body.should.have.property("isAdmin", true);
+};
 
 describe('/orgs/:url/users', function() {
   describe('without auth', function() {
@@ -134,7 +141,9 @@ describe('/orgs/:url/users', function() {
                 .post('/orgs/adminorg/users')
                 .auth('testuser', 'password1234')
                 .send(admintargetstanding)
-                .expect(200, done);
+                .expect(200)
+                .expect(userIsMember)
+                .end(done)
               });
             });
           });
@@ -196,7 +205,9 @@ describe('/orgs/:url/users', function() {
               .post('/orgs/testorg/users')
               .auth('testuser', 'password1234')
               .send(teststanding)
-              .expect(200, done);
+              .expect(200)
+              .expect(userIsMember)
+              .end(done);
             });
           });
         });
