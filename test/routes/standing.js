@@ -15,13 +15,19 @@ var targetorg       = { url: 'targetorg', name: 'OtherCO', ownerHandle: 'targetu
 var adminorg        = { url: 'adminorg', name: 'E', ownerHandle: 'joseph' }
 var memberorg       = { url: 'memberorg', name: 'Club1', ownerHandle: 'joseph' }
 
-var teststanding    = { url: 'testorg', handle: 'targetuser' , isMember: true}
+var teststanding    = { url: 'testorg', handle: 'targetuser' , isAdmin: true}
 var targetstanding  = { url: 'targetorg', handle: 'testuser' }
 var adminstanding   = { url: 'adminorg', handle: 'testuser', isAdmin: true }
 var memberstanding  = { url: 'memberorg', handle: 'testuser', isMember: true }
 
 var admintargetstanding = { url: 'adminorg', handle: 'targetuser', isMember: true };
 
+var standingupdate  = { isMember: true };
+
+var isValidStanding = function(res) {
+  res.body.should.have.property("org");
+  res.body.should.have.property("user");
+};
 var userIsMember = function(res) {
   res.body.should.have.property("isMember", true);
 };
@@ -206,7 +212,7 @@ describe('/orgs/:url/users', function() {
               .auth('testuser', 'password1234')
               .send(teststanding)
               .expect(200)
-              .expect(userIsMember)
+              .expect(userIsAdmin)
               .end(done);
             });
           });
@@ -218,15 +224,335 @@ describe('/orgs/:url/users', function() {
 
 
 describe('/orgs/:url/users/:handle', function() {
-
+  describe('without auth', function() {
+    describe('GET', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(targetstanding, function() {
+              request
+              .get('/orgs/targetorg/users/testuser')
+              .expect(401, done)
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(targetstanding, function() {
+              request
+              .put('/orgs/targetorg/users/testuser')
+              .send(standingupdate)
+              .expect(401, done)
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(targetstanding, function() {
+              request
+              .delete('/orgs/targetorg/users/testuser')
+              .expect(401, done)
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as user', function() {
+    describe('GET', function() {
+      it('should respond with standing', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(targetstanding, function() {
+              request
+              .get('/orgs/targetorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .expect(isValidStanding)
+              .end(done);
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(targetstanding, function() {
+              request
+              .put('/orgs/targetorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .send(standingupdate)
+              .expect(401, done);
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(targetstanding, function() {
+              request
+              .delete('/orgs/targetorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .expect(401, done);
+            });
+          });
+        });
+      });
+    }); 
+  });
+  describe('as member', function() {
+    describe('GET', function() {
+      it('should respond with standing', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(memberorg, function() {
+            makeStanding(memberstanding, function() {
+              request
+              .get('/orgs/memberorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .expect(isValidStanding)
+              .expect(userIsMember)
+              .end(done);
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(memberorg, function() {
+            makeStanding(memberstanding, function() {
+              request
+              .put('/orgs/memberorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .send(standingupdate)
+              .expect(401, done);
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(memberorg, function() {
+            makeStanding(memberstanding, function() {
+              request
+              .delete('/orgs/memberorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .expect(401, done);
+            });
+          });
+        });
+      });
+    }); 
+  });
+  describe('as admin', function() {
+    describe('GET', function() {
+      it('should respond with standing', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(adminorg, function() {
+            makeStanding(adminstanding, function() {
+              request
+              .get('/orgs/adminorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .expect(isValidStanding)
+              .expect(userIsAdmin)
+              .end(done);
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should update standing', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(adminorg, function() {
+            makeStanding(adminstanding, function() {
+              request
+              .put('/orgs/adminorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .send(standingupdate)
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .expect(userIsMember)
+              .end(done);
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should remove standing', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(adminorg, function() {
+            makeStanding(adminstanding, function() {
+              request
+              .delete('/orgs/adminorg/users/testuser')
+              .auth('testuser', 'password1234')
+              .expect('Content-Type', /json/)
+              .expect(200, done);
+            });
+          });
+        });
+      });
+    }); 
+  });
+  describe('as owner', function() {
+    describe('GET', function() {
+      it('should respond with standing', function(done) {
+        makeUser(testuser, function() {
+          makeUser(targetuser, function() {
+            makeOrg(testorg, function() {
+              makeStanding(teststanding, function() {
+                request
+                .get('/orgs/testorg/users/targetuser')
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(isValidStanding)
+                .expect(userIsAdmin)
+                .end(done);
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should update standing', function(done) {
+        makeUser(testuser, function() {
+          makeUser(targetuser, function() {
+            makeOrg(testorg, function() {
+              makeStanding(teststanding, function() {
+                request
+                .put('/orgs/testorg/users/targetuser')
+                .auth('testuser', 'password1234')
+                .send(standingupdate)
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(userIsMember)
+                .end(done);
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should remove standing', function(done) {
+        makeUser(testuser, function() {
+          makeUser(targetuser, function() {
+            makeOrg(testorg, function() {
+              makeStanding(teststanding, function() {
+                request
+                .put('/orgs/testorg/users/targetuser')
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+              });
+            });
+          });
+        });
+      });
+    }); 
+  });
 });
 
 
 describe('/users/:handle/orgs', function() {
-
+  describe('without auth', function() {
+    describe('GET', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(targetuser, function() {
+          makeOrg(testorg, function() {
+            makeStanding(teststanding, function() {
+              request
+              .get('/users/targetuser/orgs')
+              .expect(401, done);
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as user', function() {
+    describe('GET', function() {
+      it('should respond with standings', function(done) {
+        makeUser(targetuser, function() {
+          makeOrg(testorg, function() {
+            makeStanding(teststanding, function() {
+              makeUser(testuser, function() {
+                request
+                .get('/users/targetuser/orgs')
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+  //+as me
 });
 
 
 describe('/users/:handle/orgs/:url', function() {
-
+  describe('without auth', function() {
+    describe('GET', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(targetuser, function() {
+          makeOrg(testorg, function() {
+            makeStanding(teststanding, function() {
+              request
+              .get('/users/targetuser/orgs/testorg')
+              .expect(401, done);
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as user', function() {
+    describe('GET', function() {
+      it('should respond with standings', function(done) {
+        makeUser(targetuser, function() {
+          makeOrg(testorg, function() {
+            makeStanding(teststanding, function() {
+              makeUser(testuser, function() {
+                request
+                .get('/users/targetuser/orgs/testorg')
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(isValidStanding)
+                .end(done);
+              });
+            });
+          });
+        });
+      });
+    });
+  });
 });
+

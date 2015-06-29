@@ -35,7 +35,7 @@ To run
 
 #Current Task
 
-- Standing Unit Tests
+- Event Unit Tests
 
 #todo
 
@@ -43,7 +43,8 @@ To run
 - Event controller
 - Attend controller <-- the biggie; parsing, dupe handling etc
 - `/m/` route on individual orgs and users for membership filtering
-- pending user logic
+- require isMember for `/u/` routes within org
+- pending user logic/model
 - Load Saving
 - ~~Error Middleware~~(kinda?)
 - ~~Regex for `url` and `handle` in model and routes~~(redirect instead)
