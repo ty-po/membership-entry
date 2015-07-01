@@ -35,7 +35,7 @@ To run
 
 #Current Task
 
-- Event Unit Tests
+- Event Controller (w/ TDD)
 
 #todo
 

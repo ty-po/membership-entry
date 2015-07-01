@@ -40,6 +40,7 @@ var makeUser = function(spec, done) {
     auth:     spec.password
   });
   user.save(function(err, user) {
+    if(err) return console.log('User Creation Failed');
     return done();
   });
 };
@@ -51,6 +52,7 @@ var makeOrg = function(spec, done) {
     ownerHandle:  spec.ownerHandle,
   });
   org.save(function(err, org) {
+    if(err) return console.log('Org Creation Failed');
     return done();
   });
 };
@@ -63,7 +65,19 @@ var makeStanding = function(spec, done) {
     isAdmin: spec.isAdmin,
   });
   standing.save(function(err, org) {
+    if(err) return console.log('Standing Creation Failed');
     return done();
+  });
+}
+
+var makeEvent = function(spec, done) {
+  var event = new db.Event({
+    name: spec.name,
+    org: spec.url,
+  });
+  event.save(function(err, org) {
+    if(err) return console.log('Event Creation Failed');
+    return done(org._id);
   });
 }
 
@@ -71,4 +85,5 @@ module.exports = {
   makeUser: makeUser,
   makeOrg:  makeOrg,
   makeStanding: makeStanding,
+  makeEvent: makeEvent,
 };
