@@ -61,15 +61,14 @@ describe('/orgs/:url/users', function() {
   });
   describe('as user', function() {
     describe('GET', function() {
-      it('should respond with standings', function(done) {
+      it('should respond with unauthoried', function(done) {
         makeUser(testuser, function() {
           makeOrg(targetorg, function() {
             makeStanding(targetstanding, function() {
               request
               .get('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
-              .expect('Content-Type', /json/)
-              .expect(200, done);
+              .expect(401, done);
             });
           });
         });
@@ -268,17 +267,14 @@ describe('/orgs/:url/users/:handle', function() {
   });
   describe('as user', function() {
     describe('GET', function() {
-      it('should respond with standing', function(done) {
+      it('should respond with unauthorized', function(done) {
         makeUser(testuser, function() {
           makeOrg(targetorg, function() {
             makeStanding(targetstanding, function() {
               request
               .get('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
-              .expect('Content-Type', /json/)
-              .expect(200)
-              .expect(isValidStanding)
-              .end(done);
+              .expect(401, done);
             });
           });
         });
@@ -496,7 +492,7 @@ describe('/users/:handle/orgs', function() {
   });
   describe('as user', function() {
     describe('GET', function() {
-      it('should respond with standings', function(done) {
+      it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
           makeOrg(testorg, function() {
             makeStanding(teststanding, function() {
@@ -504,8 +500,7 @@ describe('/users/:handle/orgs', function() {
                 request
                 .get('/users/targetuser/orgs')
                 .auth('testuser', 'password1234')
-                .expect('Content-Type', /json/)
-                .expect(200, done);
+                .expect(401, done);
               });
             });
           });
@@ -513,7 +508,22 @@ describe('/users/:handle/orgs', function() {
       });
     });
   });
-  //+as me
+  describe('as me', function() {
+    describe('GET', function() {
+      it('should respond with standings', function(done) {
+        makeOrg(targetorg, function() {
+          makeStanding(targetstanding, function() {
+            makeUser(testuser, function() {
+              request
+              .get('/users/testuser/orgs')
+              .auth('testuser', 'password1234')
+              .expect(200, done);
+            });
+          });
+        });
+      });
+    });
+  });
 });
 
 
@@ -535,7 +545,7 @@ describe('/users/:handle/orgs/:url', function() {
   });
   describe('as user', function() {
     describe('GET', function() {
-      it('should respond with standings', function(done) {
+      it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
           makeOrg(testorg, function() {
             makeStanding(teststanding, function() {
@@ -543,11 +553,26 @@ describe('/users/:handle/orgs/:url', function() {
                 request
                 .get('/users/targetuser/orgs/testorg')
                 .auth('testuser', 'password1234')
-                .expect('Content-Type', /json/)
-                .expect(200)
-                .expect(isValidStanding)
-                .end(done);
+                .expect(401, done);
               });
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as me', function() {
+    describe('GET', function() {
+      it('should respond with standing', function(done) {
+        makeOrg(targetorg, function() {
+          makeStanding(targetstanding, function() {
+            makeUser(testuser, function() {
+              request
+              .get('/users/testuser/orgs/targetorg')
+              .auth('testuser', 'password1234')
+              .expect(200)
+              .expect(isValidStanding)
+              .end(done);
             });
           });
         });

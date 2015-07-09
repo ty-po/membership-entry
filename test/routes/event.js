@@ -24,6 +24,12 @@ var isValidEvent = function(res) {
   res.body.should.have.property("name");
   res.body.should.have.property("org");
 };
+var isValidEventArray = function(res) {
+  res.body.should.have.length[1];
+};
+var eventIsUpdated = function(res) {
+  res.body.should.have.property("name", 'Better Name');
+};
 
 describe('/orgs/:url/events', function() {
   describe('without auth', function() {
@@ -51,14 +57,15 @@ describe('/orgs/:url/events', function() {
   });
   describe('as user', function() {
     describe('GET', function() {
-      it('should respond with unauthorized', function(done) {
+      it('should respond with events', function(done) {
         makeUser(testuser, function() {
           makeOrg(targetorg, function() {
             makeEvent(targetevent, function() {
               request
               .get('/orgs/targetorg/events')
               .auth('testuser', 'password1234')
-              .expect(401, done)
+              .expect('Content-Type', /json/)
+              .expect(200, done)
             });
           });
         });
@@ -117,13 +124,15 @@ describe('/orgs/:url/events', function() {
       it('should respond with events', function(done) {
         makeUser(testuser, function() {
           makeOrg(targetorg, function() {
-            makeStanding(memberstanding, function() {
+            makeStanding(adminstanding, function() {
               makeEvent(targetevent, function() {
                 request
                 .get('/orgs/targetorg/events')
                 .auth('testuser', 'password1234')
                 .expect('Content-Type', /json/)
-                .expect(200, done)
+                .expect(200)
+                .expect(isValidEventArray)
+                .end(done)
               });
             });
           });
@@ -202,7 +211,7 @@ describe('/orgs/:url/events/:id', function() {
         makeOrg(targetorg, function() {
           makeEvent(targetevent, function(id) {
             request
-            .get('/orgs/:url/events/' + id)
+            .get('/orgs/targetorg/events/' + id)
             .expect(401, done)
           });
         });
@@ -213,7 +222,7 @@ describe('/orgs/:url/events/:id', function() {
         makeOrg(targetorg, function() {
           makeEvent(targetevent, function(id) {
             request
-            .put('/orgs/:url/events/' + id)
+            .put('/orgs/targetorg/events/' + id)
             .send(eventupdate)
             .expect(401, done)
           });
@@ -225,15 +234,225 @@ describe('/orgs/:url/events/:id', function() {
         makeOrg(targetorg, function() {
           makeEvent(targetevent, function(id) {
             request
-            .delete('/orgs/:url/events/' + id)
+            .delete('/orgs/targetorg/events/' + id)
             .expect(401, done)
           });
         });
       });
     });
   });
-  describe('as user', function() {});
-  describe('as member', function() {});
-  describe('as admin', function() {});
-  describe('as owner', function() {});
+  describe('as user', function() {
+    describe('GET', function() {
+      it('should respond with event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeEvent(targetevent, function(id) {
+              request
+              .get('/orgs/targetorg/events/' + id)
+              .auth('testuser', 'password1234')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .expect(isValidEvent)
+              .end(done)
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeEvent(targetevent, function(id) {
+              request
+              .put('/orgs/targetorg/events/' + id)
+              .auth('testuser', 'password1234')
+              .send(eventupdate)
+              .expect(401, done)
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeEvent(targetevent, function(id) {
+              request
+              .delete('/orgs/targetorg/events/' + id)
+              .auth('testuser', 'password1234')
+              .expect(401, done)
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as member', function() {
+    describe('GET', function() {
+      it('should respond with event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(memberstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .get('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(isValidEvent)
+                .end(done)
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(memberstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .put('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .send(eventupdate)
+                .expect(401, done)
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should respond with unauthorized', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(memberstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .delete('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .expect(401, done)
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as admin', function() {
+    describe('GET', function() {
+      it('should respond with event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(adminstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .get('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(isValidEvent)
+                .end(done)
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should update event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(adminstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .put('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .send(eventupdate)
+                .expect(200)
+                .expect(eventIsUpdated)
+                .end(done)
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should remove event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(targetorg, function() {
+            makeStanding(adminstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .delete('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .expect(200, done)
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+  describe('as owner', function() {
+    describe('GET', function() {
+      it('should respond with event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(memberstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .get('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(isValidEvent)
+                .end(done)
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('PUT', function() {
+      it('should update event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(memberstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .put('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .send(eventupdate)
+                .expect(200)
+                .expect(eventIsUpdated)
+                .end(done)
+              });
+            });
+          });
+        });
+      });
+    });
+    describe('DELETE', function() {
+      it('should remove event', function(done) {
+        makeUser(testuser, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(memberstanding, function() {
+              makeEvent(targetevent, function(id) {
+                request
+                .delete('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .expect(200, done)
+              });
+            });
+          });
+        });
+      });
+    });
+  });
 });

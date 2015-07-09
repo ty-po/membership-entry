@@ -17,7 +17,7 @@ var post = function(req, res) {
 };
 
 var getAll = function(req, res) {
-  Event.find({}, 'name', function(err, events){
+  Event.find({'org': req.params.url}, 'name', function(err, events) {
     if (err) return handler(err,res);
     res.json(events);
   });
@@ -25,7 +25,7 @@ var getAll = function(req, res) {
 
 
 var get = function(req, res) {
-  Event.findOne({'_id': req.params.id }, function(err, event) {
+  Event.findOne({'_id': req.params.id, 'org': req.params.url }, function(err, event) {
     if (err) return handler(err,res);
     if (!event) return notFound({ 'message': 'no such event' }, res);
     res.json(event);
@@ -36,7 +36,7 @@ var put = function(req, res) {
   Event.findOne({'_id': req.params.id }, '+', function(err, event) {
     if (err) return handler(err, res);
     if (!event) return notFound({ 'message': 'no such event' }, res);
-
+    event.name = req.body.name || event.name;
 
 
     event.save(function(err,event) {
