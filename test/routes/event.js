@@ -25,7 +25,7 @@ var isValidEvent = function(res) {
   res.body.should.have.property("org");
 };
 var isValidEventArray = function(res) {
-  res.body.should.have.length[1];
+  res.body.should.have.lengthOf(1);
 };
 var eventIsUpdated = function(res) {
   res.body.should.have.property("name", 'Better Name');

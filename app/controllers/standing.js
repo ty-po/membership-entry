@@ -87,6 +87,32 @@ var del = function(req, res) {
 };
 
 
+var getUserMembership = function(req, res) {
+  Standing.find({'user': req.params.handle, isMember: true}, 'org', 
+      function(err, standings){
+    if (err) return handler(err,res);
+    res.json(standings);
+  });
+};
+
+var getOrgMembership = function(req, res) {
+  Standing.find({'org': req.params.url, isMember: true}, 'user', 
+      function(err, standings){
+    if (err) return handler(err,res);
+    res.json(standings);
+  });
+};
+
+var getMembership = function(req, res) {
+  Standing.findOne({'org': req.params.url, 'user': req.params.handle, isMember: true}, 'user org',
+      function(err, standing) {
+    if (err) return handler(err,res);
+    if (!standing) return notFound({'messge': 'no such standing'}, res);
+    res.json(standing);
+  });
+};
+
+
 module.exports = {
   post: post,
   getUser: getUser,
@@ -94,5 +120,9 @@ module.exports = {
 
   get: get,
   put: put,
-  del: del
+  del: del,
+
+  getUserMembership: getUserMembership,
+  getOrgMembership: getOrgMembership,
+  getMembership: getMembership
 };

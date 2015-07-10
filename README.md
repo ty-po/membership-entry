@@ -35,17 +35,17 @@ To run
 
 #Current Task
 
-- /m/ route and tests
+- Attend Controller
 
 #todo
 
-- unit testing
-- Event controller
 - Attend controller <-- the biggie; parsing, dupe handling etc
-- `/m/` route on individual orgs and users for membership filtering
-- require isMember for `/u/` routes within org
-- pending user logic/model
-- Load Saving
+- pending user logic/model - use student id?
+- Load Saving Middleware
+- ~~catchup unit testing~~
+- ~~`/m/` route on individual orgs and users for membership filtering~~
+- ~~Event controller~~
+- ~~require isMember for `/u/` routes within org~~
 - ~~Error Middleware~~(kinda?)
 - ~~Regex for `url` and `handle` in model and routes~~(redirect instead)
 - ~~Event model~~
