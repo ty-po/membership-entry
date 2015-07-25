@@ -66,6 +66,7 @@ describe('/users', function() {
         .expect('Content-Type', /json/)
         .expect(500, done);
       });
+      //TODO: many more user creation tests here
     });
   });
 

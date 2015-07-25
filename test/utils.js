@@ -64,7 +64,7 @@ var makeStanding = function(spec, done) {
     isMember: spec.isMember,
     isAdmin: spec.isAdmin,
   });
-  standing.save(function(err, org) {
+  standing.save(function(err, standing) {
     if(err) return console.log('Standing Creation Failed');
     return done();
   });
@@ -75,9 +75,21 @@ var makeEvent = function(spec, done) {
     name: spec.name,
     org: spec.url,
   });
-  event.save(function(err, org) {
+  event.save(function(err, event) {
     if(err) return console.log('Event Creation Failed');
-    return done(org._id);
+    return done(event._id);
+  });
+}
+
+var makeAttend = function(spec, done) {
+  var attend = new db.Attend({
+    event: spec.id,
+    user: spec.handle,
+    timeIn: Date.now(),
+  });
+  attend.save(function(err, attend) {
+    if(err) return console.log('Attend Creation Failed');
+    return done();
   });
 }
 
@@ -86,4 +98,5 @@ module.exports = {
   makeOrg:  makeOrg,
   makeStanding: makeStanding,
   makeEvent: makeEvent,
+  makeAttend: makeAttend,
 };

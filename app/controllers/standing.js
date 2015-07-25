@@ -8,6 +8,7 @@ var notFound = error.notFound;
 var post = function(req, res) {
   Standing.findOne({'org': req.params.url, 'user': req.body.handle}, 
       function(err, standing) {
+    if(err) return handler(err,res);
     if(!standing) {
       db.Org.findOne({'url': req.params.url}, function(err, org){
         if (err) return handler(err,res);
@@ -29,7 +30,7 @@ var post = function(req, res) {
       });
 
     }
-    else res.status(500).json({'message':'user exists', 'standing': standing});
+    else res.status(500).json({'message':'user standing exists', 'standing': standing});
   });
 
 

@@ -35,13 +35,19 @@ To run
 
 #Current Task
 
-- Attend Controller
+- Attend POST controller
+- User POST controller
+- Robust Tests for above
 
 #todo
 
-- Attend controller <-- the biggie; parsing, dupe handling etc
-- pending user logic/model - use student id?
+- Attend controller <-- the biggie; parsing, dupe handling etc - use student id for claiming?
+- Claim User Controller
+- Claimed Boolean and Student ID Fields in User Model
+- /search|s/ route
+- pending user membership logic/model
 - Load Saving Middleware
+- ~~Sketch User Creation Model/Cases~~
 - ~~catchup unit testing~~
 - ~~`/m/` route on individual orgs and users for membership filtering~~
 - ~~Event controller~~

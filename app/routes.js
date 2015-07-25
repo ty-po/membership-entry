@@ -60,6 +60,12 @@ router.route('/:_(orgs|o)/:url/:_(events|e)/:id')
   .get(auth.isUser, ctrl.Event.get)
   .put(auth.isUser, auth.isAdmin, ctrl.Event.put)
   .delete(auth.isUser, auth.isAdmin, ctrl.Event.del);
+//Attends Gets
+router.route('/:_(orgs|o)/:url/:_(events|e)/:id/:_(attends|a)')
+  .get(auth.isUser, auth.isMember, ctrl.Attend.getAll);
+router.route('/:_(orgs|o)/:url/:_(events|e)/:id/:_(attends|a)/:handle')
+  .get(auth.isUser, auth.isMember, ctrl.Attend.get)
+  .put(auth.isUser, auth.isMember, ctrl.Attend.put);
 
 //TODO: Add attend gets
 module.exports = router;

@@ -42,7 +42,7 @@ describe('/orgs/:url/users', function() {
         makeOrg(targetorg, function() {
           request
           .get('/orgs/targetorg/users')
-          .expect(401, done);
+          .expect(200, done);
         });
       });
     });
