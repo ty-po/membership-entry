@@ -10,6 +10,7 @@ var notFound = error.notFound
 
 var post = function(req, res) {
   //User Claim/Validation Logic Here
+  //Also if(req.body.checkOut) find Attend and set out time
   Attend.findOne({ user: req.body.handle, eventID: req.params.id}, function(err, attend) {
     if(err) return handler(err,res);
     if(!attend) {
@@ -27,7 +28,7 @@ var post = function(req, res) {
           });
           attend.save(function(err, attend) {
             if(err) return handler(err,res);
-            res.json(attend)//TODO output user standing here?
+            res.json(attend)//TODO output user standing here + door rejection logic
           });
         });
       });
@@ -46,7 +47,7 @@ var get = function(req, res) {
   Attend.findOne({event: req.params.id, user: req.params.handle}, function(err, attend) {
   if(err) return handler(err,res);
   if(!attend) return notFound({'message': 'no such attend'}, res)
-    res.json(attend);
+    res.json(attend);//TODO: return standing info as well
   });
 };
 var put = function(req,res) { //Check Out
