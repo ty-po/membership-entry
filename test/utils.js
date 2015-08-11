@@ -36,8 +36,9 @@ afterEach(function(done) {
 var Seed = {
   testuser        : { handle: 'testuser', password: 'password1234', sid: '1111111' },
   targetuser      : { handle: 'targetuser', password: 'asdf', sid: '1111110' },
-  verifieduser      : { handle: 'targetuser', password: 'asdf', sid: '1111110', card: '123asdf', verified: true },
+  verifieduser      : { handle: 'targetuser', password: 'asdf', sid: '1111110', first: 'tar', last: 'git', card: '123asdf', verified: true },
   unverifieduser      : { handle: 'targetuser', password: 'asdf', sid: '1111110', first: 'tar', last: 'git' },
+  swipeduser      : { handle: 'targetuser', password: 'asdf', sid: '1111110', first: 'tar', last: 'git', card: '123asdf' },
 
   targetorg       : { url: 'targetorg', name: 'TestCo', ownerHandle: 'joseph' },
   ownedorg        : { url: 'targetorg', name: 'TestCo', ownerHandle: 'testuser' },

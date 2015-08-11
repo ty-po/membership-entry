@@ -35,6 +35,7 @@ var post = function(req, res) {
 
       user.save(function(err, user) {
         if (err) return handler(err, res);
+        if (process.env.NODE_ENV === 'test') console.log('\t\tUser Verified')
         return res.json(user);
       });
     }

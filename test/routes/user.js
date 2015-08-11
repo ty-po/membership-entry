@@ -12,6 +12,7 @@ var failuser    = { handle: 'noPassword' }
 var garbageuser = { handle: '~~~??@@##YAAAAxxx', password: 'pass', sid: '1111112' }
 var userupdate  = { first: 'Tes', last: 'Ter' }
 var targetuser  = Seed.targetuser
+var swipeduser  = Seed.swipeduser
 
 var isValidUser = function(res) {
   res.body.should.have.property("handle");
@@ -68,7 +69,16 @@ describe('/users', function() {
         .expect('Content-Type', /json/)
         .expect(500, done);
       });
-      //TODO: many more user creation tests here
+      it('should claim unverified account', function(done) {
+        makeUser(swipeduser, function() {
+          request
+          .post('/users')
+          .send(targetuser)
+          .expect('Content-Type', /json/)
+          .expect(200, done);
+        });
+      });
+      //TODO: more user creation tests here
     });
   });
 
