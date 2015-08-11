@@ -6,20 +6,43 @@ var handler = error.message;
 var notFound = error.notFound;
 
 var post = function(req, res) {
-  var user = new User({
-    handle:   req.body.handle,
-    sid:      req.body.sid,
-    first:    req.body.first,
-    last:     req.body.last,
-    email:    req.body.email,
-    created:  Date.now(),
-    auth:     req.body.password
+  User.findOne({'sid': req.body.sid}, '+card', function(err, user){
+    if (err) return handler(err, res);
+    if (!user) {
+      var user = new User({
+        handle:   req.body.handle,
+        sid:      req.body.sid,
+        first:    req.body.first,
+        last:     req.body.last,
+        email:    req.body.email,
+        created:  Date.now(),
+        verified: false,
+        auth:     req.body.password
+      });
+
+      user.save(function(err, user) {
+        if (err) return handler(err, res);
+        return res.json(user);
+      });
+    }
+    else if (!user.verified && user.card) {
+      //user.handle = req.body.handle ||  user.handle; //TODO: is this a good idea?
+      //user.first  = req.body.first  ||  user.first;
+      // user.last   = req.body.last   ||  user.last; //Assume card is right?
+      user.email  = req.body.email;
+      user.auth = req.body.password;
+      user.verified = true;
+
+      user.save(function(err, user) {
+        if (err) return handler(err, res);
+        return res.json(user);
+      });
+    }
+    else {
+      return handler({'message': 'User exists'}, res);
+    }
   });
 
-  user.save(function(err, user) {
-    if (err) return handler(err, res);
-    res.json(user);
-  });
 };
 
 var getAll = function(req, res) {

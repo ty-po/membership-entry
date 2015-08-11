@@ -35,18 +35,17 @@ To run
 
 #Current Task
 
-- Attend POST controller
-- User POST controller
-- Robust Tests for above
+- Robust Tests for User/Attend POST
 
 #todo
 
-- Attend controller <-- the biggie; parsing, dupe handling etc - use student id for claiming?
-- Claim User Controller
-- Claimed Boolean and Student ID Fields in User Model
+- Refactor to not use handle?
 - /search|s/ route
 - pending user membership logic/model
 - Load Saving Middleware
+- ~~Attend controller <-- the biggie; parsing, dupe handling etc - use student id for claiming?~~
+- ~~Claim User Controller~~
+- ~~Claimed Boolean and Student ID Fields in User Model~~
 - ~~Sketch User Creation Model/Cases~~
 - ~~catchup unit testing~~
 - ~~`/m/` route on individual orgs and users for membership filtering~~

@@ -3,7 +3,9 @@
 var config = require('../app/config.js');
 var mongoose = require('mongoose');
 var db = require('../app/db.js');
+var parser = require('../app/controllers/card.js').parser;
 process.env.NODE_ENV = 'test'
+
 
 //var testdb = mongoose.createConnection()
 
@@ -45,7 +47,9 @@ var Seed = {
   memberstanding  : { url: 'targetorg', handle: 'testuser', isMember: true },
   adminstanding   : { url: 'targetorg', handle: 'testuser', isAdmin: true },
 
-  targetattend    : { handle: 'joseph' },
+  testattend      : { card: 'Tes/20Ter/201111111', handle: 'testuser' },
+  targetattend    : { card: 'Tar/20Git/201111110', handle: 'targetuser' },
+
 }
 
 //--------- Helper Functions ----------
