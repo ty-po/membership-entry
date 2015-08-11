@@ -8,15 +8,17 @@ var makeStanding  = utils.makeStanding;
 var makeEvent     = utils.makeEvent;
 var makeAttend    = utils.makeAttend;
 
-var testuser      = { handle: 'testuser', password: 'password1234' }
+var Seed          = utils.Seed
 
-var targetorg     = { url: 'targetorg', name: 'TestCo', ownerHandle: 'joseph' }
+var testuser      = Seed.testuser
 
-var targetevent   = { name: 'Quality Gathering', url: 'targetorg' }
+var targetorg     = Seed.targetorg
 
-var memberstanding  = { url: 'targetorg', handle: 'testuser', isMember: true }
+var targetevent   = Seed.targetevent
 
-var targetattend    = { handle: 'joseph' }
+var memberstanding  = Seed.memberstanding
+
+var targetattend    = Seed.targetattend
 
 var attendupdate    = { flag: true }
 

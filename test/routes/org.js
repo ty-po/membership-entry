@@ -6,10 +6,12 @@ var request = require('supertest')(app);
 var makeUser    = utils.makeUser;
 var makeOrg     = utils.makeOrg;
 
-var testuser    = { handle: 'testuser', password: 'password1234' };
+var Seed        = utils.Seed;
 
-var testorg     = { url: 'testorg', name: 'Test LLC', ownerHandle: 'testuser' };
-var targetorg   = { url: 'targetorg', name: 'Other Company', ownerHandle: 'joseph' };
+var testuser    = Seed.testuser
+
+var ownedorg    = Seed.ownedorg
+var targetorg   = Seed.targetorg
 var failOrg     = { url: 'dumco'};
 var garbageOrg  = { url: '#swag', name: 'GAAHT EEEM' };
 
@@ -41,7 +43,7 @@ describe('/orgs', function() {
       it('should respond with unauthorized', function(done) {
         request
         .post('/orgs')
-        .send(testorg)
+        .send(ownedorg)
         .expect(401, done);
       });
     });
@@ -64,19 +66,19 @@ describe('/orgs', function() {
           request
           .post('/orgs')
           .auth('testuser', 'password1234')
-          .send(testorg)
+          .send(ownedorg)
           .expect(200)
           .expect(isValidOrg)
           .end(done);
         });
       });
       it('should reject duplicate org', function(done) {
-        makeOrg(testorg, function() {
+        makeOrg(ownedorg, function() {
           makeUser(testuser, function() {
             request
             .post('/orgs')
             .auth('testuser', 'password1234')
-            .send(testorg)
+            .send(ownedorg)
             .expect('Content-Type', /json/)
             .expect(500, done)
           });
@@ -195,10 +197,10 @@ describe('/orgs/:url', function() {
   describe('as owner', function() {
     describe('GET', function() {
       it('should respond with org', function(done) {
-        makeOrg(testorg, function() {
+        makeOrg(ownedorg, function() {
           makeUser(testuser, function() {
             request
-            .get('/orgs/testorg')
+            .get('/orgs/targetorg')
             .auth('testuser', 'password1234')
             .expect('Content-Type', /json/)
             .expect(200)
@@ -210,10 +212,10 @@ describe('/orgs/:url', function() {
     });
     describe('PUT', function() {
       it('should update org', function(done) {
-        makeOrg(testorg, function() {
+        makeOrg(ownedorg, function() {
           makeUser(testuser, function() {
             request
-            .put('/orgs/testorg')
+            .put('/orgs/targetorg')
             .auth('testuser', 'password1234')
             .send(orgUpdate)
             .expect('Content-Type', /json/)
@@ -226,10 +228,10 @@ describe('/orgs/:url', function() {
     });
     describe('DELETE', function() {
       it('should respond with unauthorized', function(done) {
-        makeOrg(testorg, function() {
+        makeOrg(ownedorg, function() {
           makeUser(testuser, function() {
             request
-            .delete('/orgs/testorg')
+            .delete('/orgs/targetorg')
             .auth('testuser', 'password1234')
             .expect('Content-Type', /json/)
             .expect(200, done)

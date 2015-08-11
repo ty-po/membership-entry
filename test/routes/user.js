@@ -3,13 +3,15 @@ var express = require('express');
 var app = require('../../server.js');
 var request = require('supertest')(app);
 
-var makeUser = utils.makeUser;
+var makeUser  = utils.makeUser;
 
-var testuser = { handle: 'testuser', password: 'password1234' }
-var failUser  = { handle: 'noPassword' }
-var garbageUser  = { handle: '~~~??@@##YAAAAxxx', password: 'pass' }
-var userUpdate = { first: 'Tes', last: 'Ter' }
-var targetuser = { handle : 'targetuser', password: 'asdf' }
+var Seed      = utils.Seed;
+
+var testuser    = Seed.testuser
+var failuser    = { handle: 'noPassword' }
+var garbageuser = { handle: '~~~??@@##YAAAAxxx', password: 'pass', sid: '1111112' }
+var userupdate  = { first: 'Tes', last: 'Ter' }
+var targetuser  = Seed.targetuser
 
 var isValidUser = function(res) {
   res.body.should.have.property("handle");
@@ -20,8 +22,8 @@ var isTargetUser = function(res) {
 };
 
 var isUpdated = function(res) {
-  res.body.should.have.property("first", userUpdate.first);
-  res.body.should.have.property("last", userUpdate.last);
+  res.body.should.have.property("first", userupdate.first);
+  res.body.should.have.property("last", userupdate.last);
 };
 
 describe('/users', function() {
@@ -55,14 +57,14 @@ describe('/users', function() {
       it('should reject incomplete user', function(done) {
         request
         .post('/users')
-        .send(failUser)
+        .send(failuser)
         .expect('Content-Type', /json/)
         .expect(500, done);
       });
       it('should reject non alpha-numeric handle', function(done) {
         request
         .post('/users')
-        .send(garbageUser)
+        .send(garbageuser)
         .expect('Content-Type', /json/)
         .expect(500, done);
       });
@@ -117,7 +119,7 @@ describe('/users/:handle', function() {
         makeUser(targetuser, function() {
           request
           .put('/users/targetuser')
-          .send(userUpdate)
+          .send(userupdate)
           .expect(401, done);
         });
       });
@@ -166,7 +168,7 @@ describe('/users/:handle', function() {
             request
             .put('/users/targetuser')
             .auth('testuser', 'password1234')
-            .send(userUpdate)
+            .send(userupdate)
             .expect(401, done);
           });
         });
@@ -205,7 +207,7 @@ describe('/users/:handle', function() {
           request
           .put('/users/testuser')
           .auth('testuser', 'password1234')
-          .send(userUpdate)
+          .send(userupdate)
           .expect(200)
           .expect(isUpdated)
           .end(done);

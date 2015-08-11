@@ -29,10 +29,30 @@ afterEach(function(done) {
     });
   });
 });
+//---------- JSON Seed Data -----------
 
+var Seed = {
+  testuser        : { handle: 'testuser', password: 'password1234', sid: '1111111' },
+  targetuser      : { handle: 'targetuser', password: 'asdf', sid: '1111110' },
+
+  targetorg       : { url: 'targetorg', name: 'TestCo', ownerHandle: 'joseph' },
+  ownedorg        : { url: 'targetorg', name: 'TestCo', ownerHandle: 'testuser' },
+
+  targetevent     : { name: 'Quality Gathering', url: 'targetorg' },
+
+  targetstanding  : { url: 'targetorg', handle: 'targetuser',  isMember: true },
+
+  memberstanding  : { url: 'targetorg', handle: 'testuser', isMember: true },
+  adminstanding   : { url: 'targetorg', handle: 'testuser', isAdmin: true },
+
+  targetattend    : { handle: 'joseph' },
+}
+
+//--------- Helper Functions ----------
 var makeUser = function(spec, done) {
   var user = new db.User({
     handle:   spec.handle,
+    sid:      spec.sid,
     first:    spec.first,
     last:     spec.last,
     email:    spec.email,
@@ -99,4 +119,5 @@ module.exports = {
   makeStanding: makeStanding,
   makeEvent: makeEvent,
   makeAttend: makeAttend,
+  Seed: Seed,
 };

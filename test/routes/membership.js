@@ -6,13 +6,15 @@ var makeUser      = utils.makeUser;
 var makeOrg       = utils.makeOrg;
 var makeStanding  = utils.makeStanding;
 
-var testuser    = { handle: 'testuser', password: 'password1234' }
-var targetuser  = { handle: 'targetuser', password: 'asdfasdf' }
+var Seed          = utils.Seed;
 
-var targetorg = { url: 'targetorg', name: 'Test Co', ownerHandle: 'joseph' }
-var ownedorg = { url: 'targetorg', name: 'Test Co', ownerHandle: 'testuser' }
+var testuser    = Seed.testuser
+var targetuser  = Seed.targetuser
 
-var targetstanding  = { url: 'targetorg', handle: 'targetuser',  isMember: true }
+var targetorg   = Seed.targetorg
+var ownedorg    = Seed.ownedorg
+
+var targetstanding  = Seed.targetstanding
 var hiddenstanding  = { url: 'targetorg', handle: 'targetuser' }
 
 var isValidStanding = function(res) {

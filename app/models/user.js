@@ -6,12 +6,14 @@ var SALT_WORK_FACTOR = 10;
 
 var userSchema = mongoose.Schema({
   handle: { type: String, required: true, unique: true, lowercase: true, validate: validate.isAlphanumeric() },
+  sid: { type: String, required: true, unique: true, lowercase: true, validate: validate.isAlphanumeric(), select: false },
+  card: { type: String, unique: true , sparse: true, select: false },
   first: String,
   last: String,
-  card: { type: String, unique: true , sparse: true, select: false },
   email: { type: String, unique: true, sparse: true },
-  created: { type: Date },
-  auth:{ type: String, required: true, select: false }
+  created: { type: Date, default: Date.now() },
+  verified: { type: Boolean, default: false},
+  auth: { type: String, required: true, select: false }
 });
 
 

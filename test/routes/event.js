@@ -7,15 +7,17 @@ var makeOrg       = utils.makeOrg;
 var makeStanding  = utils.makeStanding;
 var makeEvent     = utils.makeEvent;
 
-var testuser        = { handle: 'testuser', password: 'password1234' }
+var Seed          = utils.Seed;
 
-var targetorg       = { url: 'targetorg', name: 'TestCo', ownerHandle: 'joseph' }
-var ownedorg       = { url: 'targetorg', name: 'TestCo', ownerHandle: 'testuser' }
+var testuser        = Seed.testuser
 
-var memberstanding  = { url: 'targetorg', handle: 'testuser', isMember: true }
-var adminstanding   = { url: 'targetorg', handle: 'testuser', isAdmin: true }
+var targetorg       = Seed.targetorg
+var ownedorg        = Seed.ownedorg
 
-var targetevent     = { name: 'Quality Gathering', url: 'targetorg'}
+var memberstanding  = Seed.memberstanding
+var adminstanding   = Seed.adminstanding
+
+var targetevent     = Seed.targetevent
 var badevent        = { garbage: 2 }
 
 var eventupdate     = { name: 'Better Name' }

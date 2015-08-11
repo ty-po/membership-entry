@@ -8,6 +8,7 @@ var notFound = error.notFound;
 var post = function(req, res) {
   var user = new User({
     handle:   req.body.handle,
+    sid:      req.body.sid,
     first:    req.body.first,
     last:     req.body.last,
     email:    req.body.email,

@@ -7,20 +7,22 @@ var makeUser      = utils.makeUser;
 var makeOrg       = utils.makeOrg;
 var makeStanding  = utils.makeStanding;
 
-var testuser        = { handle: 'testuser', password: 'password1234' }
-var targetuser      = { handle: 'targetuser', password:'111111' }
+var Seed          = utils.Seed;
 
-var testorg         = { url: 'testorg', name: 'Test', ownerHandle: 'testuser' }
-var targetorg       = { url: 'targetorg', name: 'OtherCO', ownerHandle: 'targetuser' }
-var adminorg        = { url: 'adminorg', name: 'E', ownerHandle: 'joseph' }
-var memberorg       = { url: 'memberorg', name: 'Club1', ownerHandle: 'joseph' }
+var testuser        = Seed.testuser
+var targetuser      = Seed.targetuser
 
-var teststanding    = { url: 'testorg', handle: 'targetuser' , isAdmin: true}
-var targetstanding  = { url: 'targetorg', handle: 'testuser' }
-var adminstanding   = { url: 'adminorg', handle: 'testuser', isAdmin: true }
-var memberstanding  = { url: 'memberorg', handle: 'testuser', isMember: true }
 
-var admintargetstanding = { url: 'adminorg', handle: 'targetuser', isMember: true };
+var ownedorg        = Seed.ownedorg
+var targetorg       = Seed.targetorg
+
+
+var targetstanding  = Seed.targetstanding  
+
+var adminstanding   = Seed.adminstanding
+var memberstanding  = Seed.memberstanding
+
+var admintargetstanding = { url: 'targetorg', handle: 'targetuser', isMember: true };
 
 var standingupdate  = { isMember: true };
 
@@ -49,10 +51,10 @@ describe('/orgs/:url/users', function() {
     describe('POST', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
-          makeOrg(testorg, function() {
+          makeOrg(targetorg, function() {
             request
             .post('/orgs/targetorg/users')
-            .send(teststanding)
+            .send(adminstanding)
             .expect(401, done);
           });
         });
@@ -93,10 +95,10 @@ describe('/orgs/:url/users', function() {
     describe('GET', function() {
       it('should respond with standings', function(done) {
         makeUser(testuser, function() {
-          makeOrg(memberorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(memberstanding, function() {
               request
-              .get('/orgs/memberorg/users')
+              .get('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
               .expect('Content-Type', /json/)
               .expect(200, done);
@@ -108,10 +110,10 @@ describe('/orgs/:url/users', function() {
     describe('POST', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(testuser, function() {
-          makeOrg(memberorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(memberstanding, function() {
               request
-              .post('/orgs/memberorg/users')
+              .post('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
               .expect(401, done);
             });
@@ -124,10 +126,10 @@ describe('/orgs/:url/users', function() {
     describe('GET', function() {
       it('should respond with standings', function(done) {
         makeUser(testuser, function() {
-          makeOrg(adminorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(adminstanding, function() {
               request
-              .get('/orgs/adminorg/users')
+              .get('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
               .expect('Content-Type', /json/)
               .expect(200, done);
@@ -140,10 +142,10 @@ describe('/orgs/:url/users', function() {
       it('should create new standing', function(done) {
         makeUser(testuser, function() {
           makeUser(targetuser, function() {
-            makeOrg(adminorg, function() {
+            makeOrg(targetorg, function() {
               makeStanding(adminstanding, function() {
                 request
-                .post('/orgs/adminorg/users')
+                .post('/orgs/targetorg/users')
                 .auth('testuser', 'password1234')
                 .send(admintargetstanding)
                 .expect(200)
@@ -157,10 +159,10 @@ describe('/orgs/:url/users', function() {
       it('should reject duplicate standing', function(done) {
         makeUser(testuser, function() {
           makeUser(targetuser, function() {
-            makeOrg(adminorg, function() {
+            makeOrg(targetorg, function() {
               makeStanding(adminstanding, function() {
                 request
-                .post('/orgs/adminorg/users')
+                .post('/orgs/targetorg/users')
                 .auth('testuser', 'password1234')
                 .send(adminstanding)
                 .expect(500, done);
@@ -171,10 +173,10 @@ describe('/orgs/:url/users', function() {
       });
       it('should reject nonexistent user', function(done) {
         makeUser(testuser, function() {
-          makeOrg(adminorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(adminstanding, function() {
               request
-              .post('/orgs/adminorg/users')
+              .post('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
               .send(admintargetstanding)
               .expect(404, done);
@@ -189,10 +191,10 @@ describe('/orgs/:url/users', function() {
     describe('GET', function() {
       it('should respond with standings', function(done) {
         makeUser(testuser, function() {
-          makeOrg(testorg, function() {
-            makeStanding(teststanding, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(targetstanding, function() {
               request
-              .get('/orgs/testorg/users')
+              .get('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
               .expect('Content-Type', /json/)
               .expect(200, done);
@@ -205,13 +207,13 @@ describe('/orgs/:url/users', function() {
       it('should create new standing', function(done) {
         makeUser(testuser, function() {
           makeUser(targetuser, function() {
-            makeOrg(testorg, function() {
+            makeOrg(ownedorg, function() {
               request
-              .post('/orgs/testorg/users')
+              .post('/orgs/targetorg/users')
               .auth('testuser', 'password1234')
-              .send(teststanding)
+              .send(targetstanding)
               .expect(200)
-              .expect(userIsAdmin)
+              .expect(userIsMember)
               .end(done);
             });
           });
@@ -314,10 +316,10 @@ describe('/orgs/:url/users/:handle', function() {
     describe('GET', function() {
       it('should respond with standing', function(done) {
         makeUser(testuser, function() {
-          makeOrg(memberorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(memberstanding, function() {
               request
-              .get('/orgs/memberorg/users/testuser')
+              .get('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
               .expect('Content-Type', /json/)
               .expect(200)
@@ -332,10 +334,10 @@ describe('/orgs/:url/users/:handle', function() {
     describe('PUT', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(testuser, function() {
-          makeOrg(memberorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(memberstanding, function() {
               request
-              .put('/orgs/memberorg/users/testuser')
+              .put('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
               .send(standingupdate)
               .expect(401, done);
@@ -347,10 +349,10 @@ describe('/orgs/:url/users/:handle', function() {
     describe('DELETE', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(testuser, function() {
-          makeOrg(memberorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(memberstanding, function() {
               request
-              .delete('/orgs/memberorg/users/testuser')
+              .delete('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
               .expect(401, done);
             });
@@ -363,10 +365,10 @@ describe('/orgs/:url/users/:handle', function() {
     describe('GET', function() {
       it('should respond with standing', function(done) {
         makeUser(testuser, function() {
-          makeOrg(adminorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(adminstanding, function() {
               request
-              .get('/orgs/adminorg/users/testuser')
+              .get('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
               .expect('Content-Type', /json/)
               .expect(200)
@@ -381,10 +383,10 @@ describe('/orgs/:url/users/:handle', function() {
     describe('PUT', function() {
       it('should update standing', function(done) {
         makeUser(testuser, function() {
-          makeOrg(adminorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(adminstanding, function() {
               request
-              .put('/orgs/adminorg/users/testuser')
+              .put('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
               .send(standingupdate)
               .expect('Content-Type', /json/)
@@ -399,10 +401,10 @@ describe('/orgs/:url/users/:handle', function() {
     describe('DELETE', function() {
       it('should remove standing', function(done) {
         makeUser(testuser, function() {
-          makeOrg(adminorg, function() {
+          makeOrg(targetorg, function() {
             makeStanding(adminstanding, function() {
               request
-              .delete('/orgs/adminorg/users/testuser')
+              .delete('/orgs/targetorg/users/testuser')
               .auth('testuser', 'password1234')
               .expect('Content-Type', /json/)
               .expect(200, done);
@@ -417,15 +419,15 @@ describe('/orgs/:url/users/:handle', function() {
       it('should respond with standing', function(done) {
         makeUser(testuser, function() {
           makeUser(targetuser, function() {
-            makeOrg(testorg, function() {
-              makeStanding(teststanding, function() {
+            makeOrg(ownedorg, function() {
+              makeStanding(targetstanding, function() {
                 request
-                .get('/orgs/testorg/users/targetuser')
+                .get('/orgs/targetorg/users/targetuser')
                 .auth('testuser', 'password1234')
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .expect(isValidStanding)
-                .expect(userIsAdmin)
+                .expect(userIsMember)
                 .end(done);
               });
             });
@@ -437,10 +439,10 @@ describe('/orgs/:url/users/:handle', function() {
       it('should update standing', function(done) {
         makeUser(testuser, function() {
           makeUser(targetuser, function() {
-            makeOrg(testorg, function() {
-              makeStanding(teststanding, function() {
+            makeOrg(ownedorg, function() {
+              makeStanding(targetstanding, function() {
                 request
-                .put('/orgs/testorg/users/targetuser')
+                .put('/orgs/targetorg/users/targetuser')
                 .auth('testuser', 'password1234')
                 .send(standingupdate)
                 .expect('Content-Type', /json/)
@@ -457,10 +459,10 @@ describe('/orgs/:url/users/:handle', function() {
       it('should remove standing', function(done) {
         makeUser(testuser, function() {
           makeUser(targetuser, function() {
-            makeOrg(testorg, function() {
-              makeStanding(teststanding, function() {
+            makeOrg(ownedorg, function() {
+              makeStanding(targetstanding, function() {
                 request
-                .put('/orgs/testorg/users/targetuser')
+                .put('/orgs/targetorg/users/targetuser')
                 .auth('testuser', 'password1234')
                 .expect('Content-Type', /json/)
                 .expect(200, done);
@@ -479,8 +481,8 @@ describe('/users/:handle/orgs', function() {
     describe('GET', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
-          makeOrg(testorg, function() {
-            makeStanding(teststanding, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(targetstanding, function() {
               request
               .get('/users/targetuser/orgs')
               .expect(401, done);
@@ -494,8 +496,8 @@ describe('/users/:handle/orgs', function() {
     describe('GET', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
-          makeOrg(testorg, function() {
-            makeStanding(teststanding, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(targetstanding, function() {
               makeUser(testuser, function() {
                 request
                 .get('/users/targetuser/orgs')
@@ -532,10 +534,10 @@ describe('/users/:handle/orgs/:url', function() {
     describe('GET', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
-          makeOrg(testorg, function() {
-            makeStanding(teststanding, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(targetstanding, function() {
               request
-              .get('/users/targetuser/orgs/testorg')
+              .get('/users/targetuser/orgs/targetorg')
               .expect(401, done);
             });
           });
@@ -547,11 +549,11 @@ describe('/users/:handle/orgs/:url', function() {
     describe('GET', function() {
       it('should respond with unauthorized', function(done) {
         makeUser(targetuser, function() {
-          makeOrg(testorg, function() {
-            makeStanding(teststanding, function() {
+          makeOrg(ownedorg, function() {
+            makeStanding(targetstanding, function() {
               makeUser(testuser, function() {
                 request
-                .get('/users/targetuser/orgs/testorg')
+                .get('/users/targetuser/orgs/targetorg')
                 .auth('testuser', 'password1234')
                 .expect(401, done);
               });
@@ -565,7 +567,7 @@ describe('/users/:handle/orgs/:url', function() {
     describe('GET', function() {
       it('should respond with standing', function(done) {
         makeOrg(targetorg, function() {
-          makeStanding(targetstanding, function() {
+          makeStanding(memberstanding, function() {
             makeUser(testuser, function() {
               request
               .get('/users/testuser/orgs/targetorg')
