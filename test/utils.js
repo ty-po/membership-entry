@@ -36,6 +36,8 @@ afterEach(function(done) {
 var Seed = {
   testuser        : { handle: 'testuser', password: 'password1234', sid: '1111111' },
   targetuser      : { handle: 'targetuser', password: 'asdf', sid: '1111110' },
+  verifieduser      : { handle: 'targetuser', password: 'asdf', sid: '1111110', card: '123asdf', verified: true },
+  unverifieduser      : { handle: 'targetuser', password: 'asdf', sid: '1111110', first: 'tar', last: 'git' },
 
   targetorg       : { url: 'targetorg', name: 'TestCo', ownerHandle: 'joseph' },
   ownedorg        : { url: 'targetorg', name: 'TestCo', ownerHandle: 'testuser' },
@@ -57,10 +59,12 @@ var makeUser = function(spec, done) {
   var user = new db.User({
     handle:   spec.handle,
     sid:      spec.sid,
+    card:     spec.card,
     first:    spec.first,
     last:     spec.last,
     email:    spec.email,
     created:  Date.now(),
+    verified: spec.verified,
     auth:     spec.password
   });
   user.save(function(err, user) {

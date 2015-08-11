@@ -12,6 +12,8 @@ var Seed          = utils.Seed
 
 var testuser      = Seed.testuser
 var targetuser    = Seed.targetuser
+var verifieduser  = Seed.verifieduser
+var unverifieduser = Seed.unverifieduser
 
 var targetorg     = Seed.targetorg
 
@@ -65,12 +67,50 @@ describe('POST - /orgs/:url/events/:id/', function() {
     });
   });
   describe('as member', function() {
-    it('should create attend record', function(done) {
+    it('should create attend record for verified users', function(done) {
       makeUser(testuser, function() {
         makeOrg(targetorg, function() {
           makeStanding(memberstanding, function() {
             makeEvent(targetevent, function(id) {
-              makeUser(targetuser, function() {
+              makeUser(verifieduser, function() {
+                request
+                .post('/orgs/targetorg/events/' + id)
+                .auth('testuser', 'password1234')
+                .send(targetattend)
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .expect(isValidAttend)
+                .end(done)
+              });
+            });
+          });
+        }); 
+      });
+    });
+    it('should create new user for unregistered SID', function(done) {
+      makeUser(testuser, function() {
+        makeOrg(targetorg, function() {
+          makeStanding(memberstanding, function() {
+            makeEvent(targetevent, function(id) {
+              request
+              .post('/orgs/targetorg/events/' + id)
+              .auth('testuser', 'password1234')
+              .send(targetattend)
+              .expect(200)
+              .expect('Content-Type', /json/)
+              .expect(isValidAttend)
+              .end(done)
+            });
+          });
+        }); 
+      });
+    });
+    it('should verify created user', function(done) {
+      makeUser(testuser, function() {
+        makeOrg(targetorg, function() {
+          makeStanding(memberstanding, function() {
+            makeEvent(targetevent, function(id) {
+              makeUser(unverifieduser, function() {
                 request
                 .post('/orgs/targetorg/events/' + id)
                 .auth('testuser', 'password1234')

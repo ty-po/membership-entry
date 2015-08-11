@@ -12,7 +12,7 @@ var parser = function(card, done) {
   card = card.split('/20')
   if (card.length === 3) {
     var body = {
-      handle: card[0] + '.' + card[1],//TODO: need way to handle this(identikey for CU?)
+      handle: card[0] + card[1],//TODO: need way to handle this(identikey for CU?)
       sid: card[2],
       first: card[0],
       last: card[1]

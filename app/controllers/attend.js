@@ -18,27 +18,30 @@ var post = function(req, res) {
 
     //Working Chunk \/\/
     //
-    User.findOne({sid: body.sid}, function(err, user) {
+    User.findOne({sid: body.sid},'+card' , function(err, user) {
       if(err) return handler(err, res);
-      //if(!user) return notFound({'message': 'no such user'}, res)
       if(!user) {
         var user = new User({
           handle:   body.handle,
           sid:      body.sid,
           first:    body.first,
-          last:     body.last
+          last:     body.last,
+          auth:     Math.random() //TODO: fix this
         });
         user.save(function(err, user) {
           if (err) return handler(err, res)
+          if (process.env.NODE_ENV === 'test') console.log('\t\tUser Created')
         });
       }
       else if (!user.verified && !user.card) {
-        if (user.first == body.first || user.last == body.last) {
-          user.card = res.body.card;
+        if (user.first.toLowerCase() === body.first.toLowerCase() 
+              || user.last.toLowerCase() === body.last.toLowerCase()) {
+          user.card = req.body.card;
           user.verified = true;
 
           user.save(function(err, user) {
             if (err) return handler(err, res)
+          if (process.env.NODE_ENV === 'test') console.log('\t\tUser Verified')
           });
         }
       }
