@@ -39,6 +39,7 @@ To run
 
 #todo
 
+- OAuth2orize and token based auth
 - CORS Whitelist
 - Refactor to not use handle?
 - /search|s/ route
