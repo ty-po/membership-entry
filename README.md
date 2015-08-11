@@ -39,6 +39,7 @@ To run
 
 #todo
 
+- CORS Whitelist
 - Refactor to not use handle?
 - /search|s/ route
 - pending user membership logic/model

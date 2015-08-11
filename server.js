@@ -1,6 +1,7 @@
 var express     = require('express');
 var morgan      = require('morgan');
 var bodyParser  = require('body-parser');
+var cors        = require('cors');
 var passport    = require('passport');
 
 var config      = require('./app/config.js');
@@ -11,6 +12,8 @@ if (app.settings.env == 'development') {
 }
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+app.use(cors());
 
 var auth = require('./app/ctrl.js').Auth;
 auth.strategy();
