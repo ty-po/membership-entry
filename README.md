@@ -39,6 +39,12 @@ To run
 
 #todo
 
+- Include Card Field in Attends (Just In Case)
+- Date Field for Events
+- Working CU Parser
+- General Parser
+- Force membership and admin status on owner (or return in /m/ and /u/ routes)
+- jshint tests
 - OAuth2orize and token based auth
 - CORS Whitelist
 - Refactor to not use handle?

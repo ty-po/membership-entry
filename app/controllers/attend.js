@@ -12,13 +12,13 @@ var parser = require('./card.js').parser;
 
 var post = function(req, res) {
   //User Claim/Validation Logic Here
-  
+  if (!req.body.card) return handler({'message': 'No Card Data Recieved'}, res);
   parser(req.body.card, function(body, err) {
-    if (err) return handler(err, res)
 
+    if (err) return handler(err, res);
     //Working Chunk \/\/
     //
-    User.findOne({sid: body.sid},'+card' , function(err, user) {
+    User.findOne({sid: body.sid},'+card +sid' , function(err, user) {
       if(err) return handler(err, res);
       if(!user) {
         var user = new User({
@@ -26,6 +26,7 @@ var post = function(req, res) {
           sid:      body.sid,
           first:    body.first,
           last:     body.last,
+          card:     body.card,
           auth:     Math.random() //TODO: fix this
         });
         user.save(function(err, user) {
@@ -49,7 +50,7 @@ var post = function(req, res) {
       Event.findOne({_id: req.params.id}, function(err, event) {
         if(err) return handler(err,res);
         if(!event) return notFound({'message': 'no such event'}, res)
-        Attend.findOne({ user: user.handle, eventID: req.params.id}, function(err, attend) {
+        Attend.findOne({ user: user.handle, event: event._id}, function(err, attend) {
           if(err) return handler(err,res);
           if(!attend) {
             var attend = new Attend({
@@ -60,7 +61,8 @@ var post = function(req, res) {
             });
             attend.save(function(err, attend) {
               if(err) return handler(err,res);
-              res.json(attend)//TODO output user standing here + door rejection logic(or do client side?)
+              res.json(attend)
+              //TODO output user standing here + door rejection logic(or do client side?)
             });
           }
           else if (req.body.checkOut) {

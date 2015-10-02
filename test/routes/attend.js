@@ -31,6 +31,10 @@ var isValidAttend = function(res) {
   res.body.should.have.property('user');
   res.body.should.have.property('timeIn');
 };
+var debug = function(res) {
+  console.log(res.body)
+  console.log(res.text)
+};
 var isValidAttendArray = function(res) {
   res.body.should.have.lengthOf(1);
 };

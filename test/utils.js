@@ -50,8 +50,8 @@ var Seed = {
   memberstanding  : { url: 'targetorg', handle: 'testuser', isMember: true },
   adminstanding   : { url: 'targetorg', handle: 'testuser', isAdmin: true },
 
-  testattend      : { card: 'Tes/20Ter/201111111', handle: 'testuser' },
-  targetattend    : { card: 'Tar/20Git/201111110', handle: 'targetuser' },
+  testattend      : { card: '%B1023=1111110=TAR Der/GIT=19234?', handle: 'testuser' },
+  targetattend    : { card: '%B612007=1111110=TAR ROBERT/GIT=100629404000?', handle: 'targetuser' },
 
 }
 

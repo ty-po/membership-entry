@@ -7,19 +7,28 @@ var error = require('../error.js');
 var handler = error.message;
 var notFound = error.notFound
 
-//Garbage Test Parser
+//Garbage First Parser
 var parser = function(card, done) {
-  card = card.split('/20')
-  if (card.length === 3) {
+  arr = card.split('=')
+  if (arr.length == 4) {
+    name = arr[2].split(' ');
+    fn = name[0];
+    ln = name[1].split('/')[1];
+
     var body = {
-      handle: card[0] + card[1],//TODO: need way to handle this(identikey for CU?)
-      sid: card[2],
-      first: card[0],
-      last: card[1]
+      card: card,
+      sid: arr[1],
+      first: fn,
+      last: ln,
+      handle: fn + ln//TODO: need way to handle this(identikey for CU?)
     }
   }
-  else if (!body) var err = { 'message': 'Parsing Failed' }
-  return done(body, err);
+  if (!body.sid || !body.handle || !body.card) {
+    var err = { 'message': 'Parsing Failed' }
+  }
+  else {
+    return done(body, err);
+  }
 }
 
 

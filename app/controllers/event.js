@@ -8,6 +8,7 @@ var notFound = error.notFound;
 var post = function(req, res) {
   var event = new Event({
     name: req.body.name,
+    date: req.body.date,
     org: req.params.url,
   });
   event.save(function(err, event) {
@@ -37,6 +38,7 @@ var put = function(req, res) {
     if (err) return handler(err, res);
     if (!event) return notFound({ 'message': 'no such event' }, res);
     event.name = req.body.name || event.name;
+    event.date = req.body.date || event.date;
 
 
     event.save(function(err,event) {
